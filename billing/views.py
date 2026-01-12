@@ -113,6 +113,7 @@ def create_bill(request):
 
         template = get_template("billing/bill_pdf.html")
         html = template.render({
+            # "bill": bill,
             "bill": bill,
             "logo_path": os.path.join(settings.BASE_DIR, "billing/static/images/logo.png"),
             "watermark_path": os.path.join(settings.BASE_DIR, "billing/static/images/watermark.png"),
