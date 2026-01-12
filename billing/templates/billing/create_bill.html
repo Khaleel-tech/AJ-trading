@@ -421,3 +421,152 @@
 
 </body>
 </html>
+
+
+<script>
+/* ================= ITEMS DATA ================= */
+const items = {{ items_json|safe }};
+const searchInput = document.getElementById("itemSearch");
+const suggestions = document.getElementById("suggestions");
+const billTable = document.getElementById("billTable");
+
+/* ================= SEARCH AUTOCOMPLETE ================= */
+searchInput.addEventListener("keyup", () => {
+    const query = searchInput.value.toLowerCase();
+    suggestions.innerHTML = "";
+
+    if (!query) return;
+
+    items
+        .filter(i => i.name.toLowerCase().includes(query))
+        .slice(0, 5)
+        .forEach(item => {
+            const div = document.createElement("div");
+            div.textContent = `${item.name} - ₹${item.price}`;
+            div.style.cursor = "pointer";
+            div.onclick = () => addItem(item);
+            suggestions.appendChild(div);
+        });
+});
+
+/* ================= ADD ITEM ================= */
+function addItem(item) {
+    suggestions.innerHTML = "";
+    searchInput.value = "";
+
+    if (document.getElementById("row-" + item.id)) return;
+
+    const row = document.createElement("tr");
+    row.id = "row-" + item.id;
+
+    row.innerHTML = `
+    <td class="sno"></td>
+    <td>${item.name}</td>
+
+    <td>
+        <input type="number" name="qty_${item.id}" value="1" min="0"
+               onchange="recalculateTotals()">
+    </td>
+
+    <td>
+        <input type="number" name="suit_${item.id}" value="0" min="0" step="0.01"
+               onchange="recalculateTotals()">
+    </td>
+
+    <td class="net-weight">0.000</td>
+
+    <td class="price">₹${item.price}</td>
+
+    <td class="row-total">₹0.00</td>
+
+    <td>
+        <button type="button" onclick="removeItem(${item.id})">❌</button>
+    </td>
+`;
+
+
+
+    billTable.appendChild(row);
+    updateSerialNumbers();
+    row.querySelector(`[name="qty_${item.id}"]`).focus();
+    recalculateTotals();
+}
+
+
+/* ================= REMOVE ITEM ================= */
+function removeItem(id) {
+    const row = document.getElementById("row-" + id);
+    if (row) row.remove();
+    updateSerialNumbers();
+    recalculateTotals();
+}
+
+
+// updating serail numbers
+function updateSerialNumbers() {
+    const rows = document.querySelectorAll("#billTable tr");
+    let count = 1;
+
+    rows.forEach((row, index) => {
+        if (index === 0) return; // skip header row
+        const snoCell = row.querySelector(".sno");
+        if (snoCell) {
+            snoCell.textContent = count;
+            count++;
+        }
+    });
+}
+
+
+
+
+/* ================= TOTAL CALCULATION ================= */
+function recalculateTotals() {
+    let subtotal = 0;
+
+    document.querySelectorAll("#billTable tr").forEach((row, index) => {
+        if (index === 0) return;
+
+        const priceText = row.querySelector(".price")?.textContent;
+        const qtyInput = row.querySelector("input[name^='qty_']");
+        const suitInput = row.querySelector("input[name^='suit_']");
+        const netWeightCell = row.querySelector(".net-weight");
+        const totalCell = row.querySelector(".row-total");
+
+        if (!priceText || !qtyInput || !suitInput) return;
+
+        const price = parseFloat(priceText.replace("₹", "")) || 0;
+        const qty = parseFloat(qtyInput.value) || 0;
+        const suit = parseFloat(suitInput.value) || 0;
+
+        const netWeight = qty - ((qty * suit) / 1000);
+        const finalNetWeight = netWeight < 0 ? 0 : netWeight;
+
+        netWeightCell.textContent = finalNetWeight.toFixed(2);
+
+        const rowTotal = finalNetWeight * price;
+        totalCell.textContent = "₹" + rowTotal.toFixed(1);
+
+        subtotal += rowTotal;
+    });
+
+    // Update subtotal
+    document.getElementById("subtotal").textContent = subtotal.toFixed(1);
+
+    // Get extra charges
+    const labour = parseFloat(document.getElementById("labour").value) || 0;
+    const vehicle = parseFloat(document.getElementById("vehicle").value) || 0;
+    const railway = parseFloat(document.getElementById("railway").value) || 0;
+    const tray = parseFloat(document.getElementById("tray").value) || 0;
+    const advance = parseFloat(document.getElementById("advance").value) || 0;
+
+    // Final grand total calculation
+    const grandTotal = subtotal + labour + vehicle + railway + tray - advance;
+
+    document.getElementById("grandTotal").textContent = grandTotal.toFixed(2);
+}
+
+</script>
+
+</body>
+</html>
