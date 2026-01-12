@@ -116,7 +116,7 @@ def create_bill(request):
             # "bill": bill,
             "bill": bill,
             "logo_path": os.path.join(settings.BASE_DIR, "billing/static/images/logo.png"),
-            "watermark_path": os.path.join(settings.BASE_DIR, "billing/static/images/watermark.png"),
+            # "watermark_path": os.path.join(settings.BASE_DIR, "billing/static/images/watermark.png"),
         })
 
         result = BytesIO()
