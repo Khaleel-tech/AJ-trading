@@ -3,6 +3,8 @@
 <head>
     <title>Add Item | AJ Mango Exports</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         * {
             box-sizing: border-box;
@@ -18,42 +20,33 @@
             flex-direction: column;
         }
 
+        /* ================= HEADER ================= */
+
         .header {
             background: linear-gradient(135deg, #FF9800 0%, #2E8B57 100%);
             color: white;
-            padding: 25px 40px;
+            padding: 20px 30px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             position: relative;
             overflow: hidden;
         }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -5%;
-            width: 200px;
-            height: 200px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-        }
-
         .header h1 {
             margin: 0;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             letter-spacing: 0.5px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 1;
         }
+
+        /* ================= CONTAINER ================= */
 
         .container {
             width: 90%;
             max-width: 550px;
-            margin: 60px auto;
+            margin: 50px auto;
             background: white;
-            padding: 40px 45px;
+            padding: 35px 40px;
             border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.12);
             position: relative;
@@ -72,40 +65,34 @@
         }
 
         .container::before {
-            content: '🍎';
+            content: '🥭';
             position: absolute;
-            top: -40px;
+            top: -35px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 64px;
+            font-size: 56px;
             background: white;
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            animation: rotateFruit 3s ease-in-out infinite;
-        }
-
-        @keyframes rotateFruit {
-            0%, 100% { content: '🍎'; }
-            25% { content: '🥭'; }
-            50% { content: '🍊'; }
-            75% { content: '🍇'; }
         }
 
         h2 {
             color: #145A32;
-            margin: 30px 0 30px 0;
+            margin: 35px 0 30px 0;
             text-align: center;
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
         }
 
+        /* ================= FORM ================= */
+
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 22px;
         }
 
         label {
@@ -124,7 +111,6 @@
             border-radius: 8px;
             border: 2px solid #e0e0e0;
             font-size: 15px;
-            font-family: inherit;
             transition: all 0.3s ease;
         }
 
@@ -132,56 +118,6 @@
             outline: none;
             border-color: #FF9800;
             box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
-        }
-
-        input::placeholder {
-            color: #999;
-        }
-
-        .submit-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
-            color: white;
-            border: none;
-            padding: 16px;
-            font-size: 17px;
-            font-weight: 700;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 16px rgba(255, 152, 0, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(255, 152, 0, 0.4);
-        }
-
-        .submit-btn:active {
-            transform: translateY(-1px);
-        }
-
-        .back-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #2E8B57;
-            font-weight: 600;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        .back-link:hover {
-            background: #f0f0f0;
-            color: #145A32;
         }
 
         .input-icon {
@@ -195,7 +131,6 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 18px;
-            pointer-events: none;
             opacity: 0.5;
         }
 
@@ -210,87 +145,121 @@
             display: block;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                width: 95%;
-                padding: 35px 25px;
-                margin: 50px auto;
-            }
+        /* ================= BUTTON ================= */
 
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(255, 152, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+        }
+
+        /* ================= BACK LINK ================= */
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #2E8B57;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #f0f0f0;
+        }
+
+        /* ================= MESSAGES ================= */
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: none;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 768px) {
             .header {
-                padding: 20px 25px;
+                padding: 18px 20px;
+                text-align: center;
             }
 
             .header h1 {
                 font-size: 22px;
             }
 
+            .container {
+                width: 95%;
+                margin: 40px auto;
+                padding: 30px 25px;
+            }
+
             h2 {
-                font-size: 22px;
+                font-size: 21px;
             }
 
             .container::before {
-                font-size: 48px;
-                width: 70px;
-                height: 70px;
-                top: -35px;
-                animation: rotateFruit 3s ease-in-out infinite;
-            }
-
-            @keyframes rotateFruit {
-                0%, 100% { content: '🍎'; }
-                25% { content: '🥭'; }
-                50% { content: '🍊'; }
-                75% { content: '🍇'; }
+                width: 65px;
+                height: 65px;
+                font-size: 42px;
+                top: -30px;
             }
         }
 
-        .success-message {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            color: #155724;
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #28a745;
-            font-weight: 600;
-            display: none;
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .container {
+                padding: 25px 20px;
+            }
+
+            input {
+                padding: 12px 14px;
+                font-size: 14px;
+            }
+
+            .submit-btn {
+                padding: 13px;
+                font-size: 15px;
+            }
         }
-
-        .error-message {
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-            color: #721c24;
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #dc3545;
-            font-weight: 600;
-            display: none;
-        }
-        .back-btn {
-            background: white;
-            color: #2E8B57;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .back-btn:hover {
-            background: #f5f5f5;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        
-
-
-
-
     </style>
 </head>
 
@@ -298,7 +267,6 @@
 
 <div class="header">
     <h1>🥭 AJ Mango Import & Export</h1>
-    <!-- <a href="{% url 'dashboard' %}" class="back-btn">⬅ Back to Dashboard</a> -->
 </div>
 
 <div class="container">
@@ -319,7 +287,7 @@
         <div class="form-group">
             <label>Item Name</label>
             <div class="input-icon" data-icon="🍇">
-                <input type="text" name="name" placeholder="e.g., Alphonso Mango, Valencia Orange, Red Grapes..." required>
+                <input type="text" name="name" placeholder="e.g., Alphonso Mango, Valencia Orange..." required>
             </div>
             <span class="helper-text">Enter the name of the fruit variety</span>
         </div>
