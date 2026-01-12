@@ -86,6 +86,8 @@ def create_bill(request):
         bill.total_amount = grand_total
         bill.save()
 
+        return redirect('bill_list')
+
         # Generate PDF
         # pdf_name = f"bill_{bill.id}.pdf"
         # pdf_path = os.path.join(settings.MEDIA_ROOT, "bills", pdf_name)
@@ -106,25 +108,25 @@ def create_bill(request):
 
         # return redirect("create_bill")
 
-        from django.http import HttpResponse
-        from io import BytesIO
-        from xhtml2pdf import pisa
-        from django.template.loader import get_template
+        # from django.http import HttpResponse
+        # from io import BytesIO
+        # from xhtml2pdf import pisa
+        # from django.template.loader import get_template
 
-        template = get_template("billing/bill_pdf.html")
-        html = template.render({
-            # "bill": bill,
-            "bill": bill,
-            "logo_path": os.path.join(settings.BASE_DIR, "billing/static/images/logo.png"),
-            # "watermark_path": os.path.join(settings.BASE_DIR, "billing/static/images/watermark.png"),
-        })
+        # template = get_template("billing/bill_pdf.html")
+        # html = template.render({
+        #     # "bill": bill,
+        #     "bill": bill,
+        #     "logo_path": os.path.join(settings.BASE_DIR, "billing/static/images/logo.png"),
+        #     # "watermark_path": os.path.join(settings.BASE_DIR, "billing/static/images/watermark.png"),
+        # })
 
-        result = BytesIO()
-        pisa.CreatePDF(html, dest=result)
+        # result = BytesIO()
+        # pisa.CreatePDF(html, dest=result)
 
-        response = HttpResponse(result.getvalue(), content_type='application/pdf')
-        response['Content-Disposition'] = f'inline; filename="bill_{bill.id}.pdf"'
-        return response
+        # response = HttpResponse(result.getvalue(), content_type='application/pdf')
+        # response['Content-Disposition'] = f'inline; filename="bill_{bill.id}.pdf"'
+        # return response
 
 
     # GET request

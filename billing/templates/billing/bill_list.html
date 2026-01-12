@@ -392,7 +392,7 @@
                 <td>{{ bill.created_at|date:"d M Y" }}</td>
                 <td><strong>₹{{ bill.total_amount }}</strong></td>
                 <td>
-                        <a href="{% url 'generate_bill_pdf' bill.id %}" target="_blank">View PDF</a>
+                    <a href="{% url 'generate_bill_pdf' bill.id %}" target="_blank">View PDF</a>
                 </td>
 
                 <td>
