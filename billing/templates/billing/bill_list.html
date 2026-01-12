@@ -393,7 +393,7 @@
                 <td><strong>₹{{ bill.total_amount }}</strong></td>
                 <td>
                     {% if bill.pdf %}
-                        <a href="{{ bill.pdf.url }}" class="download-btn" target="_blank">📥 Download</a>
+                        <a href="{% url 'generate_bill_pdf' bill.id %}" target="_blank">View PDF</a>
                     {% else %}
                         <span style="color: #999;">N/A</span>
                     {% endif %}

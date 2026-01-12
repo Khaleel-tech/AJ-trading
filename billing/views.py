@@ -140,6 +140,32 @@ def create_bill(request):
         }
     )
 
+from django.shortcuts import get_object_or_404
+from io import BytesIO
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.http import HttpResponse
+
+@login_required
+def generate_bill_pdf(request, bill_id):
+    bill = get_object_or_404(Bill, id=bill_id)
+
+    template = get_template("billing/bill_pdf.html")
+    html = template.render({
+        "bill": bill,
+        "logo_path": os.path.join(settings.BASE_DIR, "billing/static/images/logo.png"),
+    })
+
+    result = BytesIO()
+    pisa.CreatePDF(html, dest=result)
+
+    response = HttpResponse(result.getvalue(), content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="bill_{bill.id}.pdf"'
+    return response
+
+
+
+
 from django.shortcuts import render
 from .models import Bill
 @login_required

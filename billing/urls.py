@@ -46,6 +46,8 @@ urlpatterns = [
     path('analytics/sales/yearly/', views.bills_per_month_in_year, name='bills_per_month_in_year'),
     path('analytics/revenue/fruits/', views.revenue_by_fruit_range, name='revenue_by_fruit_range'),
     path('analytics/revenue/', views.revenue_analytics, name='revenue_analytics'),
+    path('bill-pdf/<int:bill_id>/', views.generate_bill_pdf, name='generate_bill_pdf'),
+
 
 
 
