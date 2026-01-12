@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Removed Items | AJ Mango Exports</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #FFF8E1;
+        }
+
+        .header {
+            background: linear-gradient(to right, #FFA500, #2E8B57);
+            color: white;
+            padding: 20px 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .container {
+            width: 90%;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #145A32;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: #2E8B57;
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #FFF3CD;
+        }
+
+        .restore-btn {
+            background: #27ae60;
+            color: white;
+            padding: 6px 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .restore-btn:hover {
+            background: #1e8449;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #2E8B57;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <h1>AJ Mango Import & Export</h1>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+    <h2>Removed Items Archive</h2>
+    <p class="subtitle">Restore previously removed mango products</p>
+
+    <table>
+        <tr>
+            <th>S.No</th>
+            <th>Item Name</th>
+            <th>Price (₹)</th>
+            <th>Removed At</th>
+            <th>Action</th>
+        </tr>
+
+        {% for r in removed_items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ r.item_name }}</td>
+            <td>{{ r.removed_price }}</td>
+            <td>{{ r.removed_at|date:"d M Y, H:i" }}</td>
+            <td>
+                <a href="{% url 'restore_item' r.id %}">
+                    <button class="restore-btn">Restore</button>
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="empty-msg">No removed items found</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{% url 'items_list' %}" class="back-link">← Back to Items List</a>
+
+</div>
+
+</body>
+</html>

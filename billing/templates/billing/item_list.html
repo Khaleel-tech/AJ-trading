@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Items | AJ Mango Exports</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFE0B2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF9800 0%, #2E8B57 100%);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -5%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: 10%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .logout-btn {
+            background: white;
+            color: #2E8B57;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .logout-btn:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1400px;
+            margin: 35px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            margin-bottom: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #145A32;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: 700;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #FF9800;
+            display: inline-block;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 15px;
+            margin: 15px 0 25px 0;
+        }
+
+        .search-box {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 12px;
+            border-left: 4px solid #FF9800;
+        }
+
+        .search-box input {
+            padding: 14px 18px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #FF9800;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        th {
+            background: linear-gradient(135deg, #2E8B57 0%, #1e6b42 100%);
+            color: white;
+            padding: 14px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 12px;
+            text-align: center;
+            border-bottom: 1px solid #e8e8e8;
+            background: white;
+        }
+
+        tr:hover td {
+            background: #fafafa;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 10px 12px;
+            width: 90%;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="text"]:disabled, input[type="number"]:disabled {
+            background: #f9f9f9;
+            border-color: #f0f0f0;
+            color: #555;
+        }
+
+        input[type="text"]:not(:disabled):focus, input[type="number"]:not(:disabled):focus {
+            outline: none;
+            border-color: #FF9800;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 0 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .edit-btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            display: none;
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+        }
+
+        .remove-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+        }
+
+        .remove-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 25px;
+            padding: 12px 24px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            background: linear-gradient(135deg, #2E8B57 0%, #1e6b42 100%);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 12px rgba(46, 139, 87, 0.3);
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 139, 87, 0.4);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 150px;
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE0B2 100%);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #FF9800;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .stat-card h4 {
+            margin: 0 0 5px 0;
+            color: #666;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card p {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #145A32;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 25px 20px;
+            }
+
+            .header {
+                padding: 20px 25px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .search-box input {
+                max-width: 100%;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 6px;
+            }
+
+            .btn {
+                padding: 6px 10px;
+                font-size: 11px;
+                margin: 2px;
+            }
+
+            input[type="text"], input[type="number"] {
+                width: 95%;
+                padding: 8px;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+            }
+
+            .stat-card {
+                min-width: 100%;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state::before {
+            content: '🍎';
+            display: block;
+            font-size: 64px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="header-content">
+        <h1>🍎 AJ Mango Import & Export</h1>
+    </div>
+
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout-btn">Logout</button>
+    </form>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+    <h2>✏️ Manage Fruit Items</h2>
+    <p class="subtitle">Edit prices, update names, or remove fruit products from your inventory</p>
+
+    <div class="stats-bar">
+        <div class="stat-card">
+            <h4>Total Items</h4>
+            <p>{{ items|length }}</p>
+        </div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Search fruit item name...">
+    </div>
+
+    <!-- IMPORTANT: CSRF TOKEN -->
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+    <table id="itemsTable">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Price (₹)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr data-id="{{ item.id }}">
+                <td>
+                    <input type="text" class="edit-name" value="{{ item.name }}" disabled>
+                </td>
+                <td>
+                    <input type="number" class="edit-price" value="{{ item.price }}" step="0.01" disabled>
+                </td>
+                <td>
+                    <button type="button" class="btn edit-btn" onclick="enableEdit(this)">✏️ Edit</button>
+                    <button type="button" class="btn save-btn" onclick="saveEdit(this)">💾 Save</button>
+                    <button type="button" class="btn remove-btn" onclick="removeItem(this)">🗑️ Remove</button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="empty-state">
+                    <p>No items found</p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'dashboard' %}" class="back-link">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>
+<script>
+/* ================= SEARCH ================= */
+document.getElementById("searchInput").addEventListener("keyup", function () {
+    const filter = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#itemsTable tr");
+
+    rows.forEach((row, index) => {
+        if (index === 0) return;
+        const name = row.querySelector(".edit-name").value.toLowerCase();
+        row.style.display = name.includes(filter) ? "" : "none";
+    });
+});
+
+/* ================= ENABLE EDIT ================= */
+function enableEdit(btn) {
+    const row = btn.closest("tr");
+    row.querySelector(".edit-name").disabled = false;
+    row.querySelector(".edit-price").disabled = false;
+
+    btn.style.display = "none";
+    btn.nextElementSibling.style.display = "inline-block";
+}
+
+/* ================= SAVE EDIT ================= */
+function saveEdit(btn) {
+    const row = btn.closest("tr");
+    const itemId = row.dataset.id;
+    const name = row.querySelector(".edit-name").value;
+    const price = row.querySelector(".edit-price").value;
+
+    fetch(`/update-item/${itemId}/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken()
+        },
+        body: JSON.stringify({
+            name: name,
+            price: price
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            row.querySelector(".edit-name").disabled = true;
+            row.querySelector(".edit-price").disabled = true;
+
+            btn.style.display = "none";
+            btn.previousElementSibling.style.display = "inline-block";
+
+            alert("Item updated successfully!");
+        } else {
+            alert("Update failed!");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error updating item");
+    });
+}
+
+
+function removeItem(btn) {
+    if (!confirm("Are you sure you want to remove this item?")) return;
+
+    const row = btn.closest("tr");
+    const itemId = row.dataset.id;
+
+    fetch(`/remove-item/${itemId}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": getCSRFToken(),
+            "Content-Type": "application/json"
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            row.remove();
+            alert("Item removed and logged successfully!");
+        } else {
+            alert("Failed to remove item");
+        }
+    });
+}
+
+
+
+
+
+
+/* ================= GET CSRF ================= */
+function getCSRFToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+</script>
+
+</body>
+</html>

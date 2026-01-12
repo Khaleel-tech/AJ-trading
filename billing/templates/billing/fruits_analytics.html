@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fruits Analytics | AJ Mango Exports</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFE0B2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF9800 0%, #2E8B57 100%);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: white;
+            color: #2E8B57;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .btn-group {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 3px 12px rgba(255, 152, 0, 0.3);
+        }
+
+        .btn.secondary {
+            background: linear-gradient(135deg, #2E8B57 0%, #1e6b42 100%);
+        }
+
+        /* 👇 PIE CHART SIZE CONTROLLER */
+        .chart-wrapper {
+            width: 280px;      /* change size here */
+            height: 280px;     /* change size here */
+            margin: 30px auto; /* center */
+        }
+
+        @media (max-width: 600px) {
+            .chart-wrapper {
+                width: 220px;
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <h1>🥭 Fruits Analytics</h1>
+    <a href="{% url 'dashboard' %}" class="back-btn">⬅ Back</a>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+    <div class="card">
+
+        <!-- DATA BUTTONS -->
+        <div class="btn-group">
+            <button class="btn" onclick="loadTopQty()">Top by Quantity</button>
+            <button class="btn" onclick="loadTopWeight()">Top by Net Weight</button>
+            <button class="btn" onclick="loadTopRevenue()">Top by Revenue (₹)</button>
+        </div>
+
+        <!-- VIEW TYPE BUTTONS -->
+        <div class="btn-group">
+            <button class="btn secondary" onclick="setChartType('bar')">📊 Bar Chart</button>
+            <button class="btn secondary" onclick="setChartType('pie')">🥧 Pie Chart</button>
+        </div>
+
+        <!-- CHART -->
+        <div class="chart-wrapper">
+            <canvas id="fruitsChart"></canvas>
+        </div>
+
+    </div>
+</div>
+
+<script>
+let chart;
+let currentChartType = 'bar';
+let currentData = null;
+let currentLabel = '';
+
+function renderChart(labels, data, labelText) {
+    const ctx = document.getElementById('fruitsChart').getContext('2d');
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+        type: currentChartType,
+        data: {
+            labels: labels,
+            datasets: [{
+                label: labelText,
+                data: data,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,   // 🔥 IMPORTANT FOR SIZE CONTROL
+            scales: currentChartType === 'bar' ? {
+                y: { beginAtZero: true }
+            } : {}
+        }
+    });
+}
+
+function setChartType(type) {
+    currentChartType = type;
+
+    if (currentData) {
+        renderChart(currentData.labels, currentData.values, currentLabel);
+    }
+}
+
+function loadTopQty() {
+    fetch('/analytics/top-items/quantity/')
+        .then(res => res.json())
+        .then(data => {
+            currentData = data;
+            currentLabel = 'Top Fruits (Quantity)';
+            renderChart(data.labels, data.values, currentLabel);
+        });
+}
+
+function loadTopWeight() {
+    fetch('/analytics/top-items/weight/')
+        .then(res => res.json())
+        .then(data => {
+            currentData = data;
+            currentLabel = 'Top Fruits (Net Weight)';
+            renderChart(data.labels, data.values, currentLabel);
+        });
+}
+
+function loadTopRevenue() {
+    fetch('/analytics/top-items/revenue/')
+        .then(res => res.json())
+        .then(data => {
+            currentData = data;
+            currentLabel = 'Top Fruits (₹)';
+            renderChart(data.labels, data.values, currentLabel);
+        });
+}
+</script>
+
+</body>
+</html>

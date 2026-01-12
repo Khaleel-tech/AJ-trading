@@ -1,0 +1,605 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Bill | AJ Mango Exports</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFE0B2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF9800 0%, #2E8B57 100%);
+            color: white;
+            padding: 25px 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -5%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1400px;
+            margin: 30px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            margin-bottom: 40px;
+        }
+
+        h2, h3 {
+            color: #145A32;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 20px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #FF9800;
+            display: inline-block;
+        }
+
+        .section {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: #fafafa;
+            border-radius: 12px;
+            border-left: 4px solid #FF9800;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            background: #f5f5f5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .field-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .field-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #FF9800;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        #itemSearch {
+            width: 100%;
+            max-width: 400px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        #itemSearch:focus {
+            border-color: #FF9800;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+        }
+
+        #suggestions {
+            background: white;
+            border: 2px solid #e0e0e0;
+            max-width: 400px;
+            border-radius: 8px;
+            margin-top: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        #suggestions div {
+            padding: 12px 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        #suggestions div:last-child {
+            border-bottom: none;
+        }
+
+        #suggestions div:hover {
+            background: #FFF3E0;
+            padding-left: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        th {
+            background: linear-gradient(135deg, #2E8B57 0%, #1e6b42 100%);
+            color: white;
+            padding: 14px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 12px;
+            text-align: center;
+            border-bottom: 1px solid #e8e8e8;
+            font-size: 14px;
+            background: white;
+        }
+
+        tr:hover td {
+            background: #fafafa;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .remove-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
+        }
+
+        .remove-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE0B2 100%);
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 2px solid #FFD54F;
+            box-shadow: 0 4px 16px rgba(255, 152, 0, 0.15);
+        }
+
+        .summary-box p {
+            margin: 8px 0;
+            font-size: 16px;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-box h3 {
+            margin: 15px 0 0 0;
+            font-size: 24px;
+            color: #145A32;
+            padding-top: 15px;
+            border-top: 2px dashed #FF9800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .charges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 17px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(255, 152, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(255, 152, 0, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 25px 20px;
+            }
+
+            .field-group, .charges-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #itemSearch, #suggestions {
+                max-width: 100%;
+            }
+
+            .header {
+                padding: 20px 25px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 6px;
+            }
+        }
+
+        .icon-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-label::before {
+            content: '🥭';
+            font-size: 16px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🥭 AJ Mango Import & Export – Create Bill</h1>
+</div>
+
+<div class="container">
+
+<form method="post">
+{% csrf_token %}
+
+<!-- ================= CUSTOMER DETAILS ================= -->
+<div class="section">
+    <h3>👤 Customer Details</h3>
+    <div class="field-group">
+        <div class="field-wrapper">
+            <label>Customer Name</label>
+            <input type="text" name="customer_name" placeholder="Enter customer name" required>
+        </div>
+
+        <div class="field-wrapper">
+            <label>Mobile Number</label>
+            <input type="text" name="customer_mobile" placeholder="Enter mobile number" required>
+        </div>
+
+        <div class="field-wrapper">
+            <label>Address</label>
+            <textarea name="customer_address" rows="2" placeholder="Enter customer address"></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- ================= ADD ITEM ================= -->
+<div class="section">
+    <h3>🔍 Add Item</h3>
+    <input type="text" id="itemSearch" placeholder="Type mango item name to search...">
+    <div id="suggestions"></div>
+</div>
+
+<!-- ================= BILL TABLE ================= -->
+<div class="section">
+    <h3>📋 Bill Items</h3>
+
+    <table id="billTable">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Suit</th>
+                <th>Net Weight</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<!-- ================= EXTRA CHARGES ================= -->
+<div class="section">
+    <h3>💰 Extra Charges</h3>
+
+    <div class="charges-grid">
+        <div class="field-wrapper">
+            <label>Labour Charges (₹)</label>
+            <input type="number" id="labour" name="labour" value="0" min="0" step="0.01" placeholder="0.00" oninput="recalculateTotals()">
+        </div>
+
+        <div class="field-wrapper">
+            <label>Vehicle Rent (₹)</label>
+            <input type="number" id="vehicle" name="vehicle" value="0" min="0" step="0.01" placeholder="0.00" oninput="recalculateTotals()">
+        </div>
+
+        <div class="field-wrapper">
+            <label>Railway Charges (₹)</label>
+            <input type="number" id="railway" name="railway" value="0" min="0" step="0.01" placeholder="0.00" oninput="recalculateTotals()">
+        </div>
+
+        <div class="field-wrapper">
+            <label>Tray / Box Amount (₹)</label>
+            <input type="number" id="tray" name="tray" value="0" min="0" step="0.01" placeholder="0.00" oninput="recalculateTotals()">
+        </div>
+
+        <div class="field-wrapper">
+            <label>Advance (₹)</label>
+            <input type="number" id="advance" name="advance" value="0" min="0" step="0.01" placeholder="0.00" oninput="recalculateTotals()">
+        </div>
+    </div>
+</div>
+
+<!-- ================= SUMMARY ================= -->
+<div class="section summary-box">
+    <p><strong>Subtotal:</strong> <span>₹<span id="subtotal">0.00</span></span></p>
+    <p><strong>Extra Charges:</strong> <span>₹<span id="extraCharges">0.00</span></span></p>
+    <h3>Grand Total: <span>₹<span id="grandTotal">0.00</span></span></h3>
+</div>
+
+<button type="submit" class="submit-btn">✓ Generate Bill</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
+
+<script>
+/* ================= ITEMS DATA ================= */
+const items = {{ items_json|safe }};
+const searchInput = document.getElementById("itemSearch");
+const suggestions = document.getElementById("suggestions");
+const billTable = document.getElementById("billTable");
+
+/* ================= SEARCH AUTOCOMPLETE ================= */
+searchInput.addEventListener("keyup", () => {
+    const query = searchInput.value.toLowerCase();
+    suggestions.innerHTML = "";
+
+    if (!query) return;
+
+    items
+        .filter(i => i.name.toLowerCase().includes(query))
+        .slice(0, 5)
+        .forEach(item => {
+            const div = document.createElement("div");
+            div.textContent = `${item.name} - ₹${item.price}`;
+            div.style.cursor = "pointer";
+            div.onclick = () => addItem(item);
+            suggestions.appendChild(div);
+        });
+});
+
+/* ================= ADD ITEM ================= */
+function addItem(item) {
+    suggestions.innerHTML = "";
+    searchInput.value = "";
+
+    if (document.getElementById("row-" + item.id)) return;
+
+    const row = document.createElement("tr");
+    row.id = "row-" + item.id;
+
+    row.innerHTML = `
+    <td class="sno"></td>
+    <td>${item.name}</td>
+
+    <td>
+        <input type="number" name="qty_${item.id}" value="1" min="0"
+               onchange="recalculateTotals()">
+    </td>
+
+    <td>
+        <input type="number" name="suit_${item.id}" value="0" min="0" step="0.01"
+               onchange="recalculateTotals()">
+    </td>
+
+    <td class="net-weight">0.000</td>
+
+    <td class="price">₹${item.price}</td>
+
+    <td class="row-total">₹0.00</td>
+
+    <td>
+        <button type="button" onclick="removeItem(${item.id})">❌</button>
+    </td>
+`;
+
+
+
+    billTable.appendChild(row);
+    updateSerialNumbers();
+    row.querySelector(`[name="qty_${item.id}"]`).focus();
+    recalculateTotals();
+}
+
+
+/* ================= REMOVE ITEM ================= */
+function removeItem(id) {
+    const row = document.getElementById("row-" + id);
+    if (row) row.remove();
+    updateSerialNumbers();
+    recalculateTotals();
+}
+
+
+// updating serail numbers
+function updateSerialNumbers() {
+    const rows = document.querySelectorAll("#billTable tr");
+    let count = 1;
+
+    rows.forEach((row, index) => {
+        if (index === 0) return; // skip header row
+        const snoCell = row.querySelector(".sno");
+        if (snoCell) {
+            snoCell.textContent = count;
+            count++;
+        }
+    });
+}
+
+
+
+
+/* ================= TOTAL CALCULATION ================= */
+function recalculateTotals() {
+    let subtotal = 0;
+
+    document.querySelectorAll("#billTable tr").forEach((row, index) => {
+        if (index === 0) return;
+
+        const priceText = row.querySelector(".price")?.textContent;
+        const qtyInput = row.querySelector("input[name^='qty_']");
+        const suitInput = row.querySelector("input[name^='suit_']");
+        const netWeightCell = row.querySelector(".net-weight");
+        const totalCell = row.querySelector(".row-total");
+
+        if (!priceText || !qtyInput || !suitInput) return;
+
+        const price = parseFloat(priceText.replace("₹", "")) || 0;
+        const qty = parseFloat(qtyInput.value) || 0;
+        const suit = parseFloat(suitInput.value) || 0;
+
+        const netWeight = qty - ((qty * suit) / 1000);
+        const finalNetWeight = netWeight < 0 ? 0 : netWeight;
+
+        netWeightCell.textContent = finalNetWeight.toFixed(2);
+
+        const rowTotal = finalNetWeight * price;
+        totalCell.textContent = "₹" + rowTotal.toFixed(1);
+
+        subtotal += rowTotal;
+    });
+
+    // Update subtotal
+    document.getElementById("subtotal").textContent = subtotal.toFixed(1);
+
+    // Get extra charges
+    const labour = parseFloat(document.getElementById("labour").value) || 0;
+    const vehicle = parseFloat(document.getElementById("vehicle").value) || 0;
+    const railway = parseFloat(document.getElementById("railway").value) || 0;
+    const tray = parseFloat(document.getElementById("tray").value) || 0;
+    const advance = parseFloat(document.getElementById("advance").value) || 0;
+
+    // Final grand total calculation
+    const grandTotal = subtotal + labour + vehicle + railway + tray - advance;
+
+    document.getElementById("grandTotal").textContent = grandTotal.toFixed(2);
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Revenue Analytics | AJ Mango Exports</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFE0B2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF9800 0%, #2E8B57 100%);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .header h1 { margin: 0; font-size: 26px; }
+
+        .back-btn {
+            background: white;
+            color: #2E8B57;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        select, button {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            font-weight: 600;
+        }
+
+        button {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>💰 Revenue Analytics</h1>
+    <a href="{% url 'dashboard' %}" class="back-btn">⬅ Back</a>
+</div>
+
+<div class="container">
+    <div class="card">
+
+        <h2>Fruit-wise Revenue (Custom Period)</h2>
+
+        <div class="filters">
+            <select id="fromMonth">
+                <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+                <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+                <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+                <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+            </select>
+
+            <select id="fromYear"></select>
+
+            <select id="toMonth">
+                <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+                <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+                <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+                <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+            </select>
+
+            <select id="toYear"></select>
+
+            <button onclick="loadRevenue()">Apply</button>
+        </div>
+
+        <canvas id="revenueChart" height="120"></canvas>
+
+    </div>
+</div>
+
+<script>
+let chart;
+
+/* --------- DYNAMIC YEAR DROPDOWN --------- */
+function populateYears() {
+    const fromYearSelect = document.getElementById("fromYear");
+    const toYearSelect = document.getElementById("toYear");
+
+    const currentYear = new Date().getFullYear();
+    const startYear = currentYear - 5;
+
+    for (let year = currentYear; year >= startYear; year--) {
+        let opt1 = document.createElement("option");
+        opt1.value = year;
+        opt1.text = year;
+        fromYearSelect.appendChild(opt1);
+
+        let opt2 = document.createElement("option");
+        opt2.value = year;
+        opt2.text = year;
+        toYearSelect.appendChild(opt2);
+    }
+
+    // Default to current year
+    fromYearSelect.value = currentYear;
+    toYearSelect.value = currentYear;
+}
+
+populateYears();
+/* ---------------------------------------- */
+
+function renderChart(labels, data) {
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Revenue (₹)',
+                data: data,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+
+function loadRevenue() {
+    const fromMonth = document.getElementById('fromMonth').value;
+    const fromYear = document.getElementById('fromYear').value;
+    const toMonth = document.getElementById('toMonth').value;
+    const toYear = document.getElementById('toYear').value;
+
+    fetch(`/analytics/revenue/fruits/?from_month=${fromMonth}&from_year=${fromYear}&to_month=${toMonth}&to_year=${toYear}`)
+        .then(res => res.json())
+        .then(data => {
+            renderChart(data.labels, data.values);
+        });
+}
+</script>
+
+</body>
+</html>
