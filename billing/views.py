@@ -87,24 +87,44 @@ def create_bill(request):
         bill.save()
 
         # Generate PDF
-        pdf_name = f"bill_{bill.id}.pdf"
-        pdf_path = os.path.join(settings.MEDIA_ROOT, "bills", pdf_name)
-        os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
+        # pdf_name = f"bill_{bill.id}.pdf"
+        # pdf_path = os.path.join(settings.MEDIA_ROOT, "bills", pdf_name)
+        # os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
 
-        generate_pdf(
-            "billing/bill_pdf.html",
-            {
-                "bill": bill,
-                "logo_path": os.path.join(settings.MEDIA_ROOT, "logo.png"),
-                "watermark_path": os.path.join(settings.MEDIA_ROOT, "watermark.png"),
-            },
-            pdf_path
-        )
+        # generate_pdf(
+        #     "billing/bill_pdf.html",
+        #     {
+        #         "bill": bill,
+        #         "logo_path": os.path.join(settings.MEDIA_ROOT, "logo.png"),
+        #         "watermark_path": os.path.join(settings.MEDIA_ROOT, "watermark.png"),
+        #     },
+        #     pdf_path
+        # )
 
-        bill.pdf = f"bills/{pdf_name}"
-        bill.save()
+        # bill.pdf = f"bills/{pdf_name}"
+        # bill.save()
 
-        return redirect("create_bill")
+        # return redirect("create_bill")
+
+    from django.http import HttpResponse
+    from io import BytesIO
+    from xhtml2pdf import pisa
+    from django.template.loader import get_template
+
+    template = get_template("billing/bill_pdf.html")
+    html = template.render({
+        "bill": bill,
+        "logo_path": os.path.join(settings.BASE_DIR, "billing/static/images/logo.png"),
+        "watermark_path": os.path.join(settings.BASE_DIR, "billing/static/images/watermark.png"),
+    })
+
+    result = BytesIO()
+    pisa.CreatePDF(html, dest=result)
+
+    response = HttpResponse(result.getvalue(), content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="bill_{bill.id}.pdf"'
+    return response
+
 
     # GET request
     return render(
